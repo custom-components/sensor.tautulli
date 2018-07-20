@@ -12,7 +12,7 @@ from homeassistant.const import (CONF_API_KEY, CONF_HOST, CONF_PORT)
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.sensor import (PLATFORM_SCHEMA)
 
-__version__ = '0.0.3'
+__version__ = '0.0.4'
 
 REQUIREMENTS = ['pytautulli==0.0.2']
 
@@ -20,7 +20,7 @@ _LOGGER = logging.getLogger(__name__)
 
 CONF_KEYS = 'keys'
 T_DATA = 'tautulli_data'
-TU_DATA = 'tautulli_user_data'
+TU_DATA = 'tautulli_user_data_'
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_API_KEY): cv.string,
@@ -99,7 +99,7 @@ class TautulliUser(Entity):
         self._port = port
         self._username = username
         self._state = None
-        self.hass.data[TU_DATA] = {}
+        self.hass.data[TU_DATA + str(self._username)] = {}
         self.update()
 
     def update(self):
@@ -110,9 +110,9 @@ class TautulliUser(Entity):
                                                    self._port, self._api_key, self._username)
         for key in self._keys:
             try:
-                self.hass.data[TU_DATA][str(key)] = str(attrlist[key])
+                self.hass.data[TU_DATA + str(self._username)][str(key)] = str(attrlist[key])
             except:
-                _LOGGER.debug('Key %s not found.', key)
+                _LOGGER.debug('Key %s not found for %s.', key, self._username)
 
     @property
     def name(self):
@@ -132,4 +132,4 @@ class TautulliUser(Entity):
     @property
     def device_state_attributes(self):
         """Return attributes for the sensor."""
-        return self.hass.data[TU_DATA]
+        return self.hass.data[TU_DATA + str(self._username)]
