@@ -12,7 +12,7 @@ from homeassistant.const import (CONF_API_KEY, CONF_HOST, CONF_PORT)
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.sensor import (PLATFORM_SCHEMA)
 
-__version__ = '0.0.4'
+__version__ = '0.0.5'
 
 REQUIREMENTS = ['pytautulli==0.0.2']
 
@@ -113,6 +113,16 @@ class TautulliUser(Entity):
                 self.hass.data[TU_DATA + str(self._username)][str(key)] = str(attrlist[key])
             except:
                 _LOGGER.debug('Key %s not found for %s.', key, self._username)
+
+        # Adds the attribute `fullepisodename` with format: SHOW-NAME S00E00 - EP-NAME
+        try:
+            if attrlist['media_type'] == 'episode':
+                data = (attrlist['grandparent_title'] +
+                        ' S{0}'.format(attrlist['parent_media_index'].zfill(2)) +
+                        'E{0}'.format(attrlist['media_index'].zfill(2)) + ' - ' + attrlist['title'])
+                self.hass.data[TU_DATA + str(self._username)]['fullepisodename'] = str(data)
+        except:
+            self._state = self._state
 
     @property
     def name(self):
