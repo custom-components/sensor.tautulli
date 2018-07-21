@@ -14,11 +14,11 @@ from homeassistant.components.sensor import (PLATFORM_SCHEMA)
 
 __version__ = '0.0.5'
 
-REQUIREMENTS = ['pytautulli==0.0.2']
+REQUIREMENTS = ['pytautulli==0.0.4']
 
 _LOGGER = logging.getLogger(__name__)
 
-CONF_KEYS = 'keys'
+CONF_ATTRIBUTES = 'attributes'
 T_DATA = 'tautulli_data'
 TU_DATA = 'tautulli_user_data_'
 
@@ -26,7 +26,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_API_KEY): cv.string,
     vol.Required(CONF_HOST): cv.string,
     vol.Optional(CONF_PORT, default='8181'): cv.string,
-    vol.Optional(CONF_KEYS, default='None'):
+    vol.Optional(CONF_ATTRIBUTES, default='None'):
         vol.All(cv.ensure_list, [cv.string]),
     })
 
@@ -36,7 +36,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     api_key = config.get(CONF_API_KEY)
     host = config.get(CONF_HOST)
     port = config.get(CONF_PORT)
-    keys = config.get(CONF_KEYS)
+    keys = config.get(CONF_ATTRIBUTES)
     tautulli = pytautulli
     usernames = tautulli.get_users(host, port, api_key)
     for user in usernames:
@@ -113,15 +113,6 @@ class TautulliUser(Entity):
                 self.hass.data[TU_DATA + str(self._username)][str(key)] = str(attrlist[key])
             except:
                 _LOGGER.debug('Key %s not found for %s.', key, self._username)
-
-        # Adds the attribute `combined` with format: S00E00
-        try:
-            if attrlist['media_type'] == 'episode':
-                data = ('S{0}'.format(attrlist['parent_media_index'].zfill(2)) +
-                        'E{0}'.format(attrlist['media_index'].zfill(2)))
-                self.hass.data[TU_DATA + str(self._username)]['combined'] = str(data)
-        except:
-            self._state = self._state
 
     @property
     def name(self):
