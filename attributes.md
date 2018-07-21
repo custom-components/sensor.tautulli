@@ -79,10 +79,13 @@
 - rating
 - rating_key
 - relay
+- s_senum_e
 - section_id
+- senum
 - session_id
 - session_key
 - shared_libraries
+- show_senum
 - sort_title
 - state
 - stream_aspect_ratio
