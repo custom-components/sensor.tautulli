@@ -114,13 +114,12 @@ class TautulliUser(Entity):
             except:
                 _LOGGER.debug('Key %s not found for %s.', key, self._username)
 
-        # Adds the attribute `fullepisodename` with format: SHOW-NAME S00E00 - EP-NAME
+        # Adds the attribute `combined` with format: S00E00
         try:
             if attrlist['media_type'] == 'episode':
-                data = (attrlist['grandparent_title'] +
-                        ' S{0}'.format(attrlist['parent_media_index'].zfill(2)) +
-                        'E{0}'.format(attrlist['media_index'].zfill(2)) + ' - ' + attrlist['title'])
-                self.hass.data[TU_DATA + str(self._username)]['fullepisodename'] = str(data)
+                data = ('S{0}'.format(attrlist['parent_media_index'].zfill(2)) +
+                        'E{0}'.format(attrlist['media_index'].zfill(2)))
+                self.hass.data[TU_DATA + str(self._username)]['combined'] = str(data)
         except:
             self._state = self._state
 
