@@ -112,7 +112,7 @@ class TautulliUser(Entity):
             try:
                 self.hass.data[TU_DATA + str(self._username)][str(key)] = str(attrlist[key])
             except:
-                _LOGGER.debug('Key %s not found for %s.', key, self._username)
+                self.hass.data[TU_DATA + str(self._username)][str(key)] = ''
 
     @property
     def name(self):
