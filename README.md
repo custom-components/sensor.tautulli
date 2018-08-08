@@ -15,7 +15,7 @@ sensor:
   port: 8181
   attributes:
     - title
-    - show_senum
+    - s_senum_e
 ```
 
 **Configuration variables:**  
