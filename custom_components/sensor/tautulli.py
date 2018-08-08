@@ -12,9 +12,9 @@ from homeassistant.const import (CONF_API_KEY, CONF_HOST, CONF_PORT)
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.sensor import (PLATFORM_SCHEMA)
 
-__version__ = '0.0.6'
+__version__ = '0.0.7'
 
-REQUIREMENTS = ['pytautulli==0.0.4']
+REQUIREMENTS = ['pytautulli==0.0.5']
 
 _LOGGER = logging.getLogger(__name__)
 

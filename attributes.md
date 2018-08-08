@@ -56,6 +56,7 @@
 - local
 - location
 - machine_id
+- magic_title
 - media_index
 - media_type
 - optimized_version
