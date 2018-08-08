@@ -14,8 +14,7 @@ sensor:
   host: 192.168.1.14
   port: 8181
   attributes:
-    - title
-    - s_senum_e
+    - magic_title
 ```
 
 **Configuration variables:**  
