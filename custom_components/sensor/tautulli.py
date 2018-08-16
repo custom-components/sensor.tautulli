@@ -12,13 +12,14 @@ from homeassistant.const import (CONF_API_KEY, CONF_HOST, CONF_PORT)
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.sensor import (PLATFORM_SCHEMA)
 
-__version__ = '0.0.8'
+__version__ = '0.1.0'
 
 REQUIREMENTS = ['pytautulli==0.0.5']
 
 _LOGGER = logging.getLogger(__name__)
 
 CONF_ATTRIBUTES = 'attributes'
+CONF_USERS = 'users'
 T_DATA = 'tautulli_data'
 TU_DATA = 'tautulli_user_data_'
 
@@ -27,6 +28,8 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_HOST): cv.string,
     vol.Optional(CONF_PORT, default='8181'): cv.string,
     vol.Optional(CONF_ATTRIBUTES, default='None'):
+        vol.All(cv.ensure_list, [cv.string]),
+    vol.Optional(CONF_USERS, default='None'):
         vol.All(cv.ensure_list, [cv.string]),
     })
 
@@ -37,10 +40,13 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     host = config.get(CONF_HOST)
     port = config.get(CONF_PORT)
     keys = config.get(CONF_ATTRIBUTES)
+    users = config.get(CONF_USERS)
     tautulli = pytautulli
     usernames = tautulli.get_users(host, port, api_key)
     for user in usernames:
-        add_devices([TautulliUser(hass, tautulli, api_key, host, port, user, keys)])
+        _LOGGER.debug(user)
+        if user in users or 'None' in users:
+            add_devices([TautulliUser(hass, tautulli, api_key, host, port, user, keys)])
     add_devices([Tautulli(hass, tautulli, api_key, host, port)])
 
 class Tautulli(Entity):

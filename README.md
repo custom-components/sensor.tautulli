@@ -26,6 +26,7 @@ key | description
 **host (Required)** | The IP adress of the server running Tautulli.  
 **port (Optional)** | The port the Tautulli uses, defaults to `8181`  
 **attributes (Optional)** | A list of [attributes](attributes.md) you want to monitor.  
+**users (Optional)** | A list of users you want to monitor, if none is defined all users will be monitored. **NB!: Case sensetive!**
 
 ***
 Due to how `custom_componentes` are loaded, it is normal to see a `ModuleNotFoundError` error on first boot after adding this, to resolve it, restart Home-Assistant.
