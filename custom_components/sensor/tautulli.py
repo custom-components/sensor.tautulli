@@ -34,6 +34,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
         vol.All(cv.ensure_list, [cv.string]),
     })
 
+
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Create the sensor"""
     import pytautulli
@@ -53,6 +54,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
             add_devices([TautulliUser(api_key, host, port,
                                       user, keys, schema)])
     add_devices([Tautulli(api_key, host, port, schema)])
+
 
 class Tautulli(Entity):
     """Representation of a Sensor."""
@@ -74,16 +76,14 @@ class Tautulli(Entity):
         most_stats = self.tautulli.get_most_stats(self._host,
                                                   self._port,
                                                   self._api_key,
-                                                  self._schema
-                                                 )
+                                                  self._schema)
         for key in most_stats:
             self.data[str(key)] = str(most_stats[key])
 
         sever_stats = self.tautulli.get_server_stats(self._host,
                                                      self._port,
                                                      self._api_key,
-                                                     self._schema
-                                                    )
+                                                     self._schema)
         for key in sever_stats:
             self.data[str(key)] = str(sever_stats[key])
 
@@ -109,6 +109,7 @@ class Tautulli(Entity):
         """Return attributes for the sensor."""
         return self.data
 
+
 class TautulliUser(Entity):
     """Representation of a Sensor."""
 
@@ -133,18 +134,16 @@ class TautulliUser(Entity):
                                                    self._port,
                                                    self._api_key,
                                                    self._username,
-                                                   self._schema
-                                                  )
+                                                   self._schema)
         attrlist = self.tautulli.get_user_activity(self._host,
                                                    self._port,
                                                    self._api_key,
                                                    self._username,
-                                                   self._schema
-                                                  )
+                                                   self._schema)
         for key in self._keys:
             try:
                 self.data[str(self._username)][str(key)] = str(attrlist[key])
-            except:
+            except KeyError:
                 self.data[str(self._username)][str(key)] = ''
 
     @property
