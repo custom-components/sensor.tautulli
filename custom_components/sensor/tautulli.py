@@ -36,7 +36,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
-    """Create the sensor"""
+    """Create the sensor."""
     import pytautulli
     schema = 'http'
     api_key = config.get(CONF_API_KEY)
@@ -72,7 +72,7 @@ class Tautulli(Entity):
         self.update()
 
     def update(self):
-        """Method to update sensor value"""
+        """Update sensor value."""
         most_stats = self.tautulli.get_most_stats(self._host,
                                                   self._port,
                                                   self._api_key,
@@ -129,7 +129,7 @@ class TautulliUser(Entity):
         self.update()
 
     def update(self):
-        """Method to update sensor value"""
+        """Update sensor value."""
         self._state = self.tautulli.get_user_state(self._host,
                                                    self._port,
                                                    self._api_key,
