@@ -1,0 +1,53 @@
+language: python
+stages:
+  - linting
+  - publish
+
+jobs:
+  include:
+    #Linting
+    - stage: linting
+      install: pip install pycodestyle
+      name: "Linting with pycodestyle"
+      python: "3.6"
+      script: find . -name \*.py -exec pycodestyle {} +
+    - stage: linting
+      install: pip install pydocstyle
+      name: "Linting with pydocstyle"
+      python: "3.6"
+      script: find . -name \*.py -exec pydocstyle {} +
+    - stage: linting
+      install: pip install pylint
+      name: "Linting with pylint"
+      python: "3.6"
+      script: find . -name \*.py -exec pylint --disable=F0401,W0613 {} +
+    - stage: linting
+      install: pip install pyflakes
+      name: "Linting with pyflakes"
+      python: "3.6"
+      script: find . -name \*.py -exec pyflakes {} +
+    - stage: linting
+      install: pip install flake8
+      name: "Linting with flake8"
+      python: "3.6"
+      script: find . -name \*.py -exec flake8 {} +
+
+    # Deploy to Github if all tests pass and change was done on master.
+    # git commit -m 'message'
+    # git push
+    # git tag x.x.x
+    # git push origin x.x.x
+    - stage: deploy
+      name: "Deploy to GitHub"
+      script: skip
+      deploy: &releases
+        provider: releases
+        overwrite: true
+        skip_cleanup: true
+        target_commitish: $TRAVIS_COMMIT
+        tag_name: $TRAVIS_TAG
+        name: $TRAVIS_TAG
+        body: $TRAVIS_COMMIT_MESSAGE
+        api_key: $GHAPI
+        on:
+          tags: true
