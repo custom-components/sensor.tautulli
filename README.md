@@ -12,7 +12,7 @@ sensor:
   platform: tautulli
   api_key: 24b6eac0a858748664878d146bf63623b4
   host: 192.168.1.14
-  attributes:
+  monitored_variables:
     - magic_title
 ```
 
@@ -25,7 +25,7 @@ key | description
 **host (Required)** | The IP adress of the server running Tautulli.  
 **port (Optional)** | The port the Tautulli uses, defaults to `8181`  
 **ssl (Optional)** | Set to `True`if your Tautulli instance uses SSL, defaults to `False`.
-**attributes (Optional)** | A list of [attributes](attributes.md) you want to monitor.  
+**monitored_variables (Optional)** | A list of [monitored_variables](monitored_variables.md) you want to monitor.  
 **users (Optional)** | A list of users you want to monitor, if none is defined all users will be monitored. **NB!: Case sensetive!**
 
 ***
