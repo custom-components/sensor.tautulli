@@ -73,7 +73,6 @@ class Tautulli(Entity):
 
     def update(self):
         """Update sensor value."""
-
         # Update server stats
         most_stats = self.tautulli.get_most_stats(self._host,
                                                   self._port,
@@ -95,7 +94,8 @@ class Tautulli(Entity):
                                         self._api_key,
                                         self._schema)
         for user in users:
-            if user != 'Local' and (user in self._user or self._user != None):
+            if user != 'Local' and (user in self._user
+                                    or self._user is not None):
                 userstate = self.tautulli.get_user_state(self._host,
                                                          self._port,
                                                          self._api_key,
