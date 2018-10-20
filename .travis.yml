@@ -31,23 +31,3 @@ jobs:
       name: "Linting with flake8"
       python: "3.6"
       script: find . -name \*.py -exec flake8 {} +
-
-    # Deploy to Github if all tests pass and change was done on master.
-    # git commit -m 'message'
-    # git push
-    # git tag x.x.x
-    # git push origin x.x.x
-    - stage: deploy
-      name: "Deploy to GitHub"
-      script: skip
-      deploy: &releases
-        provider: releases
-        overwrite: true
-        skip_cleanup: true
-        target_commitish: $TRAVIS_COMMIT
-        tag_name: $TRAVIS_TAG
-        name: $TRAVIS_TAG
-        body: $TRAVIS_COMMIT_MESSAGE
-        api_key: $GHAPI
-        on:
-          tags: true
