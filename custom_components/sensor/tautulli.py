@@ -93,13 +93,13 @@ class Tautulli(Entity):
                                         self._api_key,
                                         self._schema)
         for user in users:
-            if user != 'Local' and (user in self._user or self._user == None):
+            if user != 'Local' and (user in self._user or self._user is None):
                 userstate = self.tautulli.get_user_state(self._host,
                                                          self._port,
                                                          self._api_key,
                                                          user,
                                                          self._schema)
-                self._data[str(user)] = {}                                         
+                self._data[str(user)] = {}
                 self._data[str(user)]['activity'] = str(userstate)
                 attrlist = self.tautulli.get_user_activity(self._host,
                                                            self._port,
