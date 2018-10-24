@@ -73,7 +73,6 @@ class Tautulli(Entity):
 
     def update(self):
         """Update sensor value."""
-
         most_stats = self.tautulli.get_most_stats(self._host,
                                                   self._port,
                                                   self._api_key,
