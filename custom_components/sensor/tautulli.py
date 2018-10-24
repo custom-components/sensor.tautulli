@@ -17,13 +17,13 @@ from homeassistant.const import (CONF_API_KEY,
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.sensor import (PLATFORM_SCHEMA)
 
-__version__ = '1.0.0'
+__version__ = '1.1.0'
 
-REQUIREMENTS = ['pytautulli==0.1.3']
+REQUIREMENTS = ['pytautulli==0.1.4']
 
 _LOGGER = logging.getLogger(__name__)
 
-CONF_USERS = 'users'
+CONF_MONITORED_USERS = 'monitored_users'
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_API_KEY): cv.string,
@@ -32,7 +32,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_SSL, default=False): cv.boolean,
     vol.Optional(CONF_MONITORED_VARIABLES, default=None):
         vol.All(cv.ensure_list, [cv.string]),
-    vol.Optional(CONF_USERS, default=None):
+    vol.Optional(CONF_MONITORED_USERS, default=None):
         vol.All(cv.ensure_list, [cv.string]),
     })
 
@@ -43,14 +43,14 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     host = config.get(CONF_HOST)
     port = config.get(CONF_PORT)
     monitored_variables = config.get(CONF_MONITORED_VARIABLES)
-    users = config.get(CONF_USERS)
+    monitored_users = config.get(CONF_MONITORED_USERS)
     ssl = config.get(CONF_SSL)
     if ssl:
         schema = 'https'
     else:
         schema = 'http'
     add_devices([Tautulli(api_key, monitored_variables,
-                          host, port, users, schema)])
+                          host, port, monitored_users, schema)])
 
 
 class Tautulli(Entity):
@@ -73,7 +73,7 @@ class Tautulli(Entity):
 
     def update(self):
         """Update sensor value."""
-        # Update server stats
+
         most_stats = self.tautulli.get_most_stats(self._host,
                                                   self._port,
                                                   self._api_key,
@@ -88,20 +88,18 @@ class Tautulli(Entity):
         for key in sever_stats:
             self._data[str(key)] = str(sever_stats[key])
 
-        # Update user stats
         users = self.tautulli.get_users(self._host,
                                         self._port,
                                         self._api_key,
                                         self._schema)
         for user in users:
-            if user != 'Local' and (user in self._user
-                                    or self._user is not None):
+            if user != 'Local' and (user in self._user or self._user == None):
                 userstate = self.tautulli.get_user_state(self._host,
                                                          self._port,
                                                          self._api_key,
                                                          user,
                                                          self._schema)
-                self._data[str(user)] = {}
+                self._data[str(user)] = {}                                         
                 self._data[str(user)]['activity'] = str(userstate)
                 attrlist = self.tautulli.get_user_activity(self._host,
                                                            self._port,
@@ -112,7 +110,7 @@ class Tautulli(Entity):
                     try:
                         self._data[str(user)][str(key)] = str(attrlist[key])
                     except KeyError:
-                        self._data[str(user)][str(key)] = None
+                        self._data[str(user)][str(key)] = ""
         self._state = sever_stats['count']
 
     @property
