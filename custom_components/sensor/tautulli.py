@@ -135,6 +135,7 @@ class TautulliSensor(Entity):
         """Return attributes for the sensor."""
         return self._attributes
 
+
 class TautulliData:
     """Get the latest data and update the states."""
 
