@@ -1,3 +1,9 @@
+# Archived
+
+This is now a part of Home Assistant https://www.home-assistant.io/components/sensor.tautulli/
+
+***
+
 # sensor.tautulli [![Build Status](https://travis-ci.com/custom-components/sensor.tautulli.svg?branch=master)](https://travis-ci.com/custom-components/sensor.tautulli)
 
 A platform which allows you to get information from Tautulli.
